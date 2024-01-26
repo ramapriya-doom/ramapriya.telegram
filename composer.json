@@ -10,6 +10,7 @@
     }
   ],
   "require": {
+    "php": "^8",
     "composer/installers": "~1",
     "irazasyed/telegram-bot-sdk": "^3"
   },
