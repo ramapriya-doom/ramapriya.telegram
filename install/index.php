@@ -2,11 +2,19 @@
 
 use Bitrix\Main\Config\Configuration;
 use Bitrix\Main\IO;
+use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\ModuleManager;
+
+Loc::loadMessages(__FILE__);
 
 class ramapriya_telegram extends CModule
 {
     public $MODULE_ID = 'ramapriya.telegram';
+
+    public function __construct()
+    {
+        $this->MODULE_NAME = Loc::getMessage('ramapriya_telegram_module_name');
+    }
 
     public function DoInstall()
     {
