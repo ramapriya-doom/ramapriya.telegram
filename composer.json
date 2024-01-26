@@ -3,7 +3,7 @@
   "description": "Bitrix module for telegram usage",
   "version": "1.0.0",
   "license": "MIT",
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
   "type": "bitrix-d7-module",
   "authors": [
     {
