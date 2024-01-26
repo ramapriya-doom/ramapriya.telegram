@@ -2,6 +2,7 @@
   "name": "ramapriya-doom/ramapriya.telegram",
   "description": "Bitrix module for telegram usage",
   "version": "1.0.0",
+  "license": "MIT",
   "minimum-stability": "stable",
   "type": "bitrix-d7-module",
   "authors": [
