@@ -1,0 +1,21 @@
+{
+  "name": "stayfuneral/ramapriya.telegram",
+  "description": "Bitrix module for telegram usage",
+  "minimum-stability": "stable",
+  "type": "bitrix-d7-module",
+  "authors": [
+    {
+      "name": "Roman Gonyukov",
+      "email": "stay.funeral@gmail.com"
+    }
+  ],
+  "require": {
+    "composer/installers": "~1",
+    "irazasyed/telegram-bot-sdk": "^3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Ramapriya\\Telegram\\": "lib"
+    }
+  }
+}
