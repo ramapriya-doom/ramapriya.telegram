@@ -4,6 +4,8 @@ namespace Ramapriya\Telegram\Controller;
 
 use Bitrix\Main\Engine\ActionFilter;
 use Bitrix\Main\Engine\Controller;
+use Ramapriya\Telegram\Service\Update;
+use Ramapriya\Telegram\Service\Webhook;
 
 
 class Telegram extends Controller
@@ -11,8 +13,7 @@ class Telegram extends Controller
     protected function getDefaultPreFilters(): array
     {
         return [
-            new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_POST]),
-            new ActionFilter\ContentType([ActionFilter\ContentType::JSON])
+            new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_POST])
         ];
     }
 
@@ -25,12 +26,13 @@ class Telegram extends Controller
         ];
     }
 
-    public function setWebhookAction()
+    public function setWebhookAction(): bool|array
     {
-        
+        return (new Webhook())->setWebhook();
     }
 
     public function getWebhookUpdatesAction()
     {
+        (new Update())->handleUpdates();
     }
 }

@@ -14,17 +14,26 @@ class TelegramBuilder implements ITelegramBuilder, IModule, IOptions
 {
     private Telegram $telegram;
 
-    private function __construct(private string $token, private bool $useAsyncRequest)
+    public function __construct(private ?string $token = null, private bool $useAsyncRequest = false)
     {
+        if (!$this->token) {
+            $this->token = Option::get(self::MODULE_ID, self::BOT_API_TOKEN);
+        }
+
+        if (!$this->token) {
+            throw new \Exception('Сохраните токен в базе, прежде чем устанавливать вебхук');
+        }
+
+        if (!$this->useAsyncRequest) {
+            $this->useAsyncRequest = Option::get(self::MODULE_ID, self::USE_ASYNC_REQUEST) === 'Y';
+        }
+
         $this->telegram = new Api($this->token, $this->useAsyncRequest);
     }
 
     public static function create(bool $replaceCommandByName = false): Telegram
     {
-        $token = Option::get(self::MODULE_ID, self::BOT_API_TOKEN);
-        $useAsyncRequest = Option::get(self::MODULE_ID, self::USE_ASYNC_REQUEST) === 'Y';
-
-        $instance = new self($token, $useAsyncRequest);
+        $instance = new self();
 
         $instance->registerCommands($replaceCommandByName);
         return $instance->getTelegram();
