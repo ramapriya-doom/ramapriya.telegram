@@ -10,7 +10,7 @@ $moduleId = $request['mid'] ?? 'ramapriya.telegram';
 
 Loader::includeModule($moduleId);
 Extension::load('ui.buttons');
-Asset::getInstance()->addJs('/local/modules/telegram/js/telegram.js');
+Asset::getInstance()->addJs('/local/modules/ramapriya.telegram/js/telegram.js');
 
 $booleanValues = [
     ''  => '',
@@ -28,12 +28,12 @@ $tabs = [
                 'bot_api_token',
                 'Токен бота',
                 '',
-                ['password', 50],
+                ['text', 50],
             ],
             [
                 '',
                 '',
-                '<button onclick="setWebhook(event)" class="ui-btn ui-btn-primary">Установить вебхук</button>',
+                '<button id="set-webhook" onclick="Telegram.setWebhook(event)" class="ui-btn ui-btn-primary">Установить вебхук</button>',
                 ['statichtml'],
             ],
             [
