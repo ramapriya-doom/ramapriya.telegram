@@ -1,11 +1,14 @@
-function setWebhook(e) {
-    e.preventDefault();
+const Telegram = {
+    setWebhook: function (e) {
+        e.preventDefault();
 
-    BX.ajax.runAction('api:controllers.Telegram.setWebhook', {})
-        .then(response => {
-            console.log(response)
-        }, reject => {
-            console.log(reject)
-        })
+        BX.ajax.runAction('ramapriya:telegram.controller.Telegram.setWebhook', {})
+            .then(response => {
+                alert(response.data.message);
+            }, reject => {
+                let error = reject.errors[0];
+                alert(error.message);
+            })
+    }
 }
 
