@@ -1,6 +1,8 @@
 <?php
 
+use Bitrix\Main\Config\Option;
 use Ramapriya\Telegram\Builder\TelegramBuilder;
+use Ramapriya\Telegram\Contracts\IOptions;
 use Telegram\Bot\Api;
 
 return [
@@ -8,20 +10,29 @@ return [
         'value' => [
             'defaultNamespace' => '\\Ramapriya\\Telegram\\Controller'
         ],
-        'readonly' => true
+        'readonly' => true,
     ],
-    'services' => [
-        'value' => [
+    'services'    => [
+        'value'    => [
             /**
              * Клиент для работы с API телеграм-бота
              */
-            'telegram' => [
+            'telegram.client' => [
                 'className' => Api::class,
-                'constructor' => static function ()
+                'constructorParams' => static function ()
                 {
-                    return TelegramBuilder::create(true);
+                    return [Option::get(IOptions::MODULE_ID, IOptions::BOT_API_TOKEN)];
                 }
             ],
+            'telegram.builder' => [
+                'className' => TelegramBuilder::class,
+                'constructor' => static function ()
+                {
+                    $builder = new TelegramBuilder();
+                    $builder->registerCommands(true);
+                    return $builder;
+                }
+            ]
         ],
         'readonly' => true
     ]
