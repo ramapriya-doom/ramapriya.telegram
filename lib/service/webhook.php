@@ -3,28 +3,59 @@
 namespace Ramapriya\Telegram\Service;
 
 use Bitrix\Main\Context;
+use Bitrix\Main\Request;
+use Bitrix\Main\Server;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 
 class Webhook extends Service
 {
+    private Request $request;
+    private Server $server;
+    private ?string $webhookUrl = null;
+
+    public function __construct(string $apiToken, string $botName)
+    {
+        $this->request = Context::getCurrent()->getRequest();
+        $this->server = $this->request->getServer();
+
+        parent::__construct($apiToken, $botName);
+
+        $this->setDefaultWebhookUrl();
+    }
+
+    private function setDefaultWebhookUrl()
+    {
+        $this->webhookUrl = sprintf(
+            'http%s://%s/telegram/updates/%s',
+            ($this->request->isHttps() ? 's' : ''),
+            $this->server->getServerName(),
+            $this->botName
+        );
+    }
+
+    public function setCustomWebhookUrl(string $webhookUrl): static
+    {
+        $this->webhookUrl = $webhookUrl;
+        return $this;
+    }
+
     /**
      * @return array
      * @throws TelegramSDKException
      */
     public function setWebhook(): array
     {
-        $request = Context::getCurrent()->getRequest();
-        $server = $request->getServer();
-        $url = sprintf('http%s://%s/telegram/updates/%s',($request->isHttps() ? 's' : ''), $server->getServerName(), $this->botName);
+        if (!$this->webhookUrl) {
+            throw new TelegramSDKException('Webhook url not defined');
+        }
 
         $this->telegram->deleteWebhook();
         $result = $this->telegram->setWebhook([
-            'url' => $url
+            'url' => $this->webhookUrl
         ]);
 
         return [
             'result' => $result,
-            'message' => 'Вебхук успешно установлен',
             'info' => $this->telegram->getWebhookInfo()->toArray()
         ];
     }
