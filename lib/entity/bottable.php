@@ -25,7 +25,7 @@ class BotTable extends DataManager
             (new Fields\StringField('NAME'))
                 ->configureRequired()
                 ->configureUnique(),
-            (new Fields\StringField('WEBHOOK_URL'))
+            (new Fields\StringField('WEBHOOK_CUSTOM_URL'))
                 ->configureNullable(),
             (new Fields\Relations\ManyToMany(
                 'MESSAGE_HANDLER',
@@ -37,10 +37,19 @@ class BotTable extends DataManager
 
     protected static function callOnAfterAddEvent($object, $fields, $id)
     {
-        if (!empty($fields['WEBHOOK_URL'])) {
-            (new Webhook($fields['API_TOKEN'], $fields['NAME']))->setWebhook();
+        $service = new Webhook($fields['API_TOKEN'], $fields['NAME']);
+
+        if (!empty($fields['WEBHOOK_CUSTOM_URL'])) {
+            $service->setCustomWebhookUrl($fields['WEBHOOK_CUSTOM_URL']);
         }
 
+        $service->setWebhook();
+
         parent::callOnAfterAddEvent($object, $fields, $id);
+    }
+
+    protected static function callOnBeforeUpdateEvent($object, $fields, $result)
+    {
+        throw new \Exception('Механизм обновления не поддерживается, чтобы изменить данные, удалите запись и добавьте заново');
     }
 }
