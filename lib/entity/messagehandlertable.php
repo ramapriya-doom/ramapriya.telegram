@@ -4,7 +4,6 @@ namespace Ramapriya\Telegram\Entity;
 
 use Bitrix\Main\ORM\Data\DataManager;
 use Bitrix\Main\ORM\Fields;
-use Bitrix\Main\ORM\Query\Join;
 
 class MessageHandlerTable extends DataManager
 {
@@ -27,11 +26,8 @@ class MessageHandlerTable extends DataManager
             new Fields\StringField('MODULE_ID'),
             (new Fields\ArrayField('HANDLER'))
                 ->configureRequired(),
-            (new Fields\Relations\Reference(
-                'BOT',
-                BotTable::class,
-                Join::on('this.BOT_ID', 'ref.ID')
-            ))->configureJoinType('inner')
+            (new Fields\Relations\ManyToMany('BOT', BotTable::class))
+                ->configureTableName('telegram_bot_handlers')
         ];
     }
 }

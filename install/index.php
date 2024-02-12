@@ -5,6 +5,7 @@ use Bitrix\Main\Config\Configuration;
 use Bitrix\Main\Config\Option;
 use Bitrix\Main\DB\Connection;
 use Bitrix\Main\IO;
+use Bitrix\Main\Loader;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\ModuleManager;
 use Bitrix\Main\ORM\Data\DataManager;
@@ -50,10 +51,9 @@ class ramapriya_telegram extends CModule
 
     public function InstallDB()
     {
+        Loader::includeModule($this->MODULE_ID);
+
         foreach ($this->orm as $dataClass) {
-            /**
-             *
-             */
             $entity = $dataClass::getEntity();
             $table = $entity->getDBTableName();
 
@@ -66,6 +66,8 @@ class ramapriya_telegram extends CModule
     public function UnInstallDB()
     {
         Option::delete($this->MODULE_ID);
+
+        Loader::includeModule($this->MODULE_ID);
 
         foreach ($this->orm as $dataClass) {
             $table = $dataClass::getEntity()->getDBTableName();

@@ -7,8 +7,7 @@ return function (Routes $routes) {
     $routes
         ->prefix('telegram')
         ->group(function (Routes $routes) {
-            $routes->post('webhook', [Telegram::class, 'setWebhookAction']);
-            $routes->post('updates', [Telegram::class, 'getWebhookUpdatesAction']);
+            $routes->post('updates/{botName}', [Telegram::class, 'getWebhookUpdatesAction']);
         });
 
 };
