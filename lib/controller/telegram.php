@@ -4,6 +4,7 @@ namespace Ramapriya\Telegram\Controller;
 
 use Bitrix\Main\Engine\ActionFilter;
 use Bitrix\Main\Engine\Controller;
+use Ramapriya\Telegram\Service\Update;
 
 
 class Telegram extends Controller
@@ -26,5 +27,7 @@ class Telegram extends Controller
 
     public function getWebhookUpdatesAction(string $botName)
     {
+        $service = new Update($botName);
+        $service->runHandlers();
     }
 }
