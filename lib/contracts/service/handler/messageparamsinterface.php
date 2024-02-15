@@ -1,6 +1,6 @@
 <?php
 
-namespace Ramapriya\Telegram\Contracts\Service;
+namespace Ramapriya\Telegram\Contracts\Service\Handler;
 
 use Telegram\Bot\Keyboard\Keyboard;
 
