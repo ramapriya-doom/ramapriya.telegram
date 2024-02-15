@@ -2,11 +2,13 @@
 
 namespace Ramapriya\Telegram\Service;
 
-use Ramapriya\Agent\CronTest;
-
-class Update extends Service
+class Update
 {
-    public function handleUpdates()
+    public function __construct(private string $botName)
+    {
+    }
+
+    public function runHandlers(): void
     {
     }
 }
