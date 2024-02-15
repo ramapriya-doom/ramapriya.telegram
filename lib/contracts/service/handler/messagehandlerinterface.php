@@ -9,7 +9,6 @@ interface MessageHandlerInterface
 {
     /**
      * Обработка входящего сообщения и отправка ответа
-     * @return mixed
      */
     public function handleMessage();
 }
