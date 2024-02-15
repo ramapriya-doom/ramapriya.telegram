@@ -24,7 +24,7 @@ class MessageHandlerTable extends DataManager
                 ->configureRequired()
                 ->configureUnique(),
             new Fields\StringField('MODULE_ID'),
-            (new Fields\ArrayField('HANDLER'))
+            (new Fields\StringField('HANDLER_CLASS'))
                 ->configureRequired(),
             (new Fields\Relations\ManyToMany('BOT', BotTable::class))
                 ->configureTableName('telegram_bot_handlers')

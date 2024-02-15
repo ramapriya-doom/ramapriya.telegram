@@ -2,9 +2,13 @@
 
 namespace Ramapriya\Telegram\Entity;
 
+use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\ORM\Data\DataManager;
 use Bitrix\Main\ORM\Fields;
+use Bitrix\Main\ORM\Query\Result;
 use Ramapriya\Telegram\Service\Webhook;
+
+Loc::loadMessages(__FILE__);
 
 class BotTable extends DataManager
 {
@@ -35,6 +39,12 @@ class BotTable extends DataManager
         ];
     }
 
+    public static function getByName(string $name, array $params = []): Result
+    {
+        $params['filter']['=NAME'] = $name;
+        return static::getList($params);
+    }
+
     protected static function callOnAfterAddEvent($object, $fields, $id)
     {
         $service = new Webhook($fields['API_TOKEN'], $fields['NAME']);
@@ -50,6 +60,6 @@ class BotTable extends DataManager
 
     protected static function callOnBeforeUpdateEvent($object, $fields, $result)
     {
-        throw new \Exception('Механизм обновления не поддерживается, чтобы изменить данные, удалите запись и добавьте заново');
+        throw new \Exception(Loc::getMessage('error_update_not_supports'));
     }
 }
