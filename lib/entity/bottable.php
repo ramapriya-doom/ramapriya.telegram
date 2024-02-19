@@ -35,12 +35,7 @@ class BotTable extends DataManager
                 ->configureRequired()
                 ->configureUnique(),
             (new Fields\StringField('WEBHOOK_CUSTOM_URL'))
-                ->configureNullable(),
-            (new Fields\Relations\ManyToMany(
-                'MESSAGE_HANDLERS',
-                MessageHandlerTable::class,
-                )
-            )->configureTableName('telegram_bot_handlers')
+                ->configureNullable()
         ];
     }
 
