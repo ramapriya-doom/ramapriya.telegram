@@ -84,10 +84,11 @@ class ramapriya_telegram extends CModule
 
         $configuration = Configuration::getInstance();
         $config = $configuration->get('routing');
-        $config['config'][] = 'telegram.php';
-
-        $configuration->addReadonly('routing', $config);
-        $configuration->saveConfiguration();
+        if (!in_array('telegram.php', $config['config'])) {
+            $config['config'][] = 'telegram.php';
+            $configuration->addReadonly('routing', $config);
+            $configuration->saveConfiguration();
+        }
     }
 
     public function uninstallRoutes()
