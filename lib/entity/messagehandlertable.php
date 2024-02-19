@@ -26,8 +26,7 @@ class MessageHandlerTable extends DataManager
             (new Fields\IntegerField('BOT_ID'))
                 ->configureRequired(),
             (new Fields\StringField('MESSAGE'))
-                ->configureRequired()
-                ->configureUnique(),
+                ->configureRequired(),
             new Fields\StringField('MODULE_ID'),
             (new Fields\StringField('HANDLER_CLASS'))
                 ->configureRequired(),
