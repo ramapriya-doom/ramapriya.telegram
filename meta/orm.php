@@ -44,17 +44,17 @@ namespace Ramapriya\Telegram\Entity {
      * @method \Ramapriya\Telegram\Entity\EO_Bot resetWebhookCustomUrl()
      * @method \Ramapriya\Telegram\Entity\EO_Bot unsetWebhookCustomUrl()
      * @method ?\string fillWebhookCustomUrl()
-     * @method \Ramapriya\Telegram\Entity\EO_MessageHandler_Collection getMessageHandler()
-     * @method \Ramapriya\Telegram\Entity\EO_MessageHandler_Collection requireMessageHandler()
-     * @method \Ramapriya\Telegram\Entity\EO_MessageHandler_Collection fillMessageHandler()
-     * @method bool hasMessageHandler()
-     * @method bool isMessageHandlerFilled()
-     * @method bool isMessageHandlerChanged()
-     * @method void addToMessageHandler(\Ramapriya\Telegram\Entity\EO_MessageHandler $messageHandler)
-     * @method void removeFromMessageHandler(\Ramapriya\Telegram\Entity\EO_MessageHandler $messageHandler)
-     * @method void removeAllMessageHandler()
-     * @method \Ramapriya\Telegram\Entity\EO_Bot resetMessageHandler()
-     * @method \Ramapriya\Telegram\Entity\EO_Bot unsetMessageHandler()
+     * @method \Ramapriya\Telegram\Entity\EO_MessageHandler_Collection getMessageHandlers()
+     * @method \Ramapriya\Telegram\Entity\EO_MessageHandler_Collection requireMessageHandlers()
+     * @method \Ramapriya\Telegram\Entity\EO_MessageHandler_Collection fillMessageHandlers()
+     * @method bool hasMessageHandlers()
+     * @method bool isMessageHandlersFilled()
+     * @method bool isMessageHandlersChanged()
+     * @method void addToMessageHandlers(\Ramapriya\Telegram\Entity\EO_MessageHandler $messageHandler)
+     * @method void removeFromMessageHandlers(\Ramapriya\Telegram\Entity\EO_MessageHandler $messageHandler)
+     * @method void removeAllMessageHandlers()
+     * @method \Ramapriya\Telegram\Entity\EO_Bot resetMessageHandlers()
+     * @method \Ramapriya\Telegram\Entity\EO_Bot unsetMessageHandlers()
      *
      * Common methods:
      * ---------------
@@ -105,9 +105,9 @@ namespace Ramapriya\Telegram\Entity {
      * @method \string[] fillName()
      * @method ?\string[] getWebhookCustomUrlList()
      * @method ?\string[] fillWebhookCustomUrl()
-     * @method \Ramapriya\Telegram\Entity\EO_MessageHandler_Collection[] getMessageHandlerList()
-     * @method \Ramapriya\Telegram\Entity\EO_MessageHandler_Collection getMessageHandlerCollection()
-     * @method \Ramapriya\Telegram\Entity\EO_MessageHandler_Collection fillMessageHandler()
+     * @method \Ramapriya\Telegram\Entity\EO_MessageHandler_Collection[] getMessageHandlersList()
+     * @method \Ramapriya\Telegram\Entity\EO_MessageHandler_Collection getMessageHandlersCollection()
+     * @method \Ramapriya\Telegram\Entity\EO_MessageHandler_Collection fillMessageHandlers()
      *
      * Common methods:
      * ---------------

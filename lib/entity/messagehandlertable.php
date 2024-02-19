@@ -12,6 +12,11 @@ class MessageHandlerTable extends DataManager
         return 'telegram_message_handler';
     }
 
+    public static function getObjectClass(): string
+    {
+        return MessageHandler::class;
+    }
+
     public static function getMap()
     {
         return [

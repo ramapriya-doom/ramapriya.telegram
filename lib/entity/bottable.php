@@ -17,6 +17,11 @@ class BotTable extends DataManager
         return 'telegram_bot';
     }
 
+    public static function getObjectClass(): string
+    {
+        return Bot::class;
+    }
+
     public static function getMap()
     {
         return [
@@ -32,7 +37,7 @@ class BotTable extends DataManager
             (new Fields\StringField('WEBHOOK_CUSTOM_URL'))
                 ->configureNullable(),
             (new Fields\Relations\ManyToMany(
-                'MESSAGE_HANDLER',
+                'MESSAGE_HANDLERS',
                 MessageHandlerTable::class,
                 )
             )->configureTableName('telegram_bot_handlers')
