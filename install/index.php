@@ -26,6 +26,7 @@ class ramapriya_telegram extends CModule
         Entity\BotTable::class,
         Entity\MessageHandlerTable::class
     ];
+    private array $adminFiles = ['bot_list', 'bot_edit', 'message_handler_list', 'message_handler_edit'];
 
     public function __construct()
     {
@@ -39,10 +40,12 @@ class ramapriya_telegram extends CModule
         ModuleManager::registerModule($this->MODULE_ID);
         $this->InstallDB();
         $this->installRoutes();
+        $this->installAdminFiles();
     }
 
     public function DoUninstall()
     {
+        $this->uninstallAdminFiles();
         $this->uninstallRoutes();
         $this->UnInstallDB();
 
@@ -109,5 +112,42 @@ class ramapriya_telegram extends CModule
 
         IO\File::deleteFile($_SERVER['DOCUMENT_ROOT'] . '/local/routes/telegram.php');
         IO\Directory::deleteDirectory($_SERVER['DOCUMENT_ROOT'] . '/telegram');
+    }
+
+    private function getModulePath(bool $absolute = true): string
+    {
+        $moduleFolder = dirname(__DIR__);
+        return !$absolute ? sprintf('/%s', str_ireplace(Loader::getDocumentRoot(), '', $moduleFolder)) : $moduleFolder;
+    }
+
+    public function installAdminFiles()
+    {
+        foreach ($this->adminFiles as $file) {
+            $adminFilePath = sprintf(
+                '%s/bitrix/admin/telegram_%s.php',
+                Loader::getDocumentRoot(),
+                $file
+            );
+            $content = sprintf(
+                '<?php require_once $_SERVER["DOCUMENT_ROOT"] . "%s/%s.php";',
+                $this->getModulePath(false),
+                $file
+            );
+
+            IO\File::putFileContents($adminFilePath, $content);
+        }
+    }
+
+    public function uninstallAdminFiles()
+    {
+        foreach ($this->adminFiles as $file) {
+            $adminFilePath = sprintf(
+                '%s/bitrix/admin/telegram_%s.php',
+                Loader::getDocumentRoot(),
+                $file
+            );
+
+            IO\File::deleteFile($adminFilePath);
+        }
     }
 }
