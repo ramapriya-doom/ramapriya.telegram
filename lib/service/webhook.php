@@ -59,4 +59,12 @@ class Webhook extends Service
             'info' => $this->telegram->getWebhookInfo()->toArray()
         ];
     }
+
+    /**
+     * @return string|null
+     */
+    public function getWebhookUrl(): ?string
+    {
+        return $this->webhookUrl;
+    }
 }

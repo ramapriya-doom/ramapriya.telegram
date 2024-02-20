@@ -3,8 +3,12 @@
 namespace Ramapriya\Telegram\Facade\Admin;
 
 use Bitrix\Main\ArgumentException;
+use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\SystemException;
 use Ramapriya\Telegram\Entity\BotTable;
+use Ramapriya\Telegram\Service\Webhook;
+
+Loc::loadMessages(__FILE__);
 
 class BotListGrid extends Grid
 {
@@ -38,9 +42,15 @@ class BotListGrid extends Grid
         $fields = BotTable::getEntity()->getFields();
 
         foreach ($fields as $field) {
+            $name = match ($field->getName()) {
+                'ID' => $field->getName(),
+                'WEBHOOK_CUSTOM_URL' => Loc::getMessage('webhook_custom_url'),
+                default => $field->getTitle(),
+            };
+
             $this->columns[] = [
                 'id' => $field->getName(),
-                'name' => $field->getName() === 'ID' ? $field->getName() : $field->getTitle(),
+                'name' => $name,
                 'sort' => $field->getName(),
                 'default' => true,
                 'editable' => false
@@ -55,16 +65,18 @@ class BotListGrid extends Grid
         $collection = $this->query->exec()->fetchCollection();
 
         foreach ($collection as $object) {
+            $service = new Webhook($object->getApiToken(), $object->getName());
             $this->rows[] = [
                 'id' => $object->getId(),
                 'columns' => [
-                    'ID'=> $object->getId(),
+                    'ID' => $object->getId(),
                     'API_TOKEN' => $object->getApiToken(),
                     'NAME' => print_url(
                         sprintf('https://t.me/%s', $object->getName()),
                         sprintf('@%s', $object->getName()),
                         'target="_blank"'
-                    )
+                    ),
+                    'WEBHOOK_CUSTOM_URL' => $service->getWebhookUrl()
                 ]
             ];
         }
