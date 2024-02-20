@@ -129,7 +129,7 @@ class ramapriya_telegram extends CModule
                 $file
             );
             $content = sprintf(
-                '<?php require_once $_SERVER["DOCUMENT_ROOT"] . "%s/%s.php";',
+                '<?php require_once $_SERVER["DOCUMENT_ROOT"] . "%s/admin/%s.php";',
                 $this->getModulePath(false),
                 $file
             );
