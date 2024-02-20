@@ -30,12 +30,15 @@ class BotTable extends DataManager
                 ->configureAutocomplete(),
             (new Fields\StringField('API_TOKEN'))
                 ->configureRequired()
-                ->configureUnique(),
+                ->configureUnique()
+                ->configureTitle(Loc::getMessage('api_token_field_title')),
             (new Fields\StringField('NAME'))
                 ->configureRequired()
-                ->configureUnique(),
+                ->configureUnique()
+                ->configureTitle('Username'),
             (new Fields\StringField('WEBHOOK_CUSTOM_URL'))
                 ->configureNullable()
+                ->configureTitle(Loc::getMessage('webhook_custom_url_title'))
         ];
     }
 
