@@ -2,15 +2,19 @@
 
 namespace Ramapriya\Telegram\Entity;
 
+use Bitrix\Main\ArgumentException;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\ORM\Data\DataManager;
+use Bitrix\Main\ORM\Entity;
 use Bitrix\Main\ORM\Fields;
 use Bitrix\Main\ORM\Query\Result;
+use Bitrix\Main\SystemException;
 use Ramapriya\Telegram\Service\Webhook;
 
 Loc::loadMessages(__FILE__);
 
-class BotTable extends DataManager
+class BotTable
+    extends DataManager
 {
     public static function getTableName(): string
     {
@@ -64,5 +68,27 @@ class BotTable extends DataManager
     protected static function callOnBeforeUpdateEvent($object, $fields, $result)
     {
         throw new \Exception(Loc::getMessage('error_update_not_supports'));
+    }
+
+    /**
+     * Удаление обработчиков входящих сообщений после удаления бота
+     *
+     * @param Bot $object
+     * @param Entity $entity
+     *
+     * @return void
+     *
+     * @throws ArgumentException
+     * @throws SystemException
+     */
+    protected static function callOnAfterDeleteEvent($object, $entity)
+    {
+        $handlers = MessageHandlerTable::getByBotId($object->getId())->fetchCollection();
+
+        foreach ($handlers as $handler) {
+            $handler->delete();
+        }
+
+        parent::callOnAfterDeleteEvent($object, $entity);
     }
 }
