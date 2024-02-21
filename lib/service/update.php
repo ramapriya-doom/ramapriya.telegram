@@ -2,6 +2,7 @@
 
 namespace Ramapriya\Telegram\Service;
 
+use Bitrix\Main\Loader;
 use Bitrix\Main\NotImplementedException;
 use Bitrix\Main\SystemException;
 use Ramapriya\Telegram\Contracts\Service\Handler\MessageHandlerInterface;
@@ -38,10 +39,17 @@ final class Update
         foreach ($messageHandlers as $messageHandler) {
             $client = new Api($messageHandler->getBot()->getApiToken());
             $handlerClass = $messageHandler->getHandlerClass();
-            $handler      = new $handlerClass($client);
+
+            if ($messageHandler->hasModuleId()) {
+                Loader::includeModule($messageHandler->getModuleId());
+            }
+
+            $handler = new $handlerClass($client);
 
             if (!($handler instanceof MessageHandlerInterface)) {
-                throw new NotImplementedException(sprintf('Class %s must be implemented from %s', $handlerClass, MessageHandlerInterface::class));
+                throw new NotImplementedException(
+                    sprintf('Class %s must be implemented from %s', $handlerClass, MessageHandlerInterface::class)
+                );
             }
 
             $handler->handleMessage();
