@@ -3,31 +3,22 @@
 namespace Ramapriya\Telegram\Facade\Admin;
 
 use Bitrix\Main\Localization\Loc;
-use Bitrix\Main\ORM\Data\DataManager;
-use Bitrix\Main\ORM\Entity;
 use Bitrix\Main\Page\Asset;
 use Bitrix\Main\UI\Filter\FieldAdapter;
 use Ramapriya\Telegram\Entity\BotTable;
-use Ramapriya\Telegram\Entity\EO_Bot_Entity;
 use Ramapriya\Telegram\Helper\ModuleHelper;
 use Ramapriya\Telegram\Service\Webhook;
 
 Loc::loadMessages(__DIR__ . '/botlistgrid.php');
+Loc::loadMessages(__FILE__);
 
 class BotUiList extends UiList
 {
-    protected \CAdminUiSorting $uiSorting;
-    protected \CAdminUiList $uiList;
-    protected DataManager|string $dataClass;
-    protected EO_Bot_Entity|Entity $entity;
-    protected array $filterFields = [];
-    protected array $filter = [];
-
     public function __construct(string $id)
     {
         parent::__construct($id);
         $this->dataClass = BotTable::class;
-        $this->entity = $this->dataClass::getEntity();
+        $this->entity    = $this->dataClass::getEntity();
         $this->initJs();
     }
 
@@ -41,13 +32,13 @@ class BotUiList extends UiList
     {
         foreach ($this->entity->getFields() as $field => $fieldObject) {
             $this->filterFields[] = [
-                'id' => $field,
-                'name' => match ($fieldObject->getName()) {
-                    'ID' => $fieldObject->getName(),
+                'id'      => $field,
+                'name'    => match ($fieldObject->getName()) {
+                    'ID'                 => $fieldObject->getName(),
                     'WEBHOOK_CUSTOM_URL' => Loc::getMessage('webhook_custom_url'),
-                    default => $fieldObject->getTitle()
+                    default              => $fieldObject->getTitle()
                 },
-                'type' => $field === 'ID' ? FieldAdapter::NUMBER : FieldAdapter::STRING,
+                'type'    => $field === 'ID' ? FieldAdapter::NUMBER : FieldAdapter::STRING,
                 'default' => true
             ];
         }
@@ -61,15 +52,15 @@ class BotUiList extends UiList
 
         foreach ($this->entity->getFields() as $fieldName => $fieldObject) {
             $name = match ($fieldObject->getName()) {
-                'ID' => $fieldObject->getName(),
+                'ID'                 => $fieldObject->getName(),
                 'WEBHOOK_CUSTOM_URL' => Loc::getMessage('webhook_custom_url'),
-                default => $fieldObject->getTitle(),
+                default              => $fieldObject->getTitle(),
             };
 
             $headers[] = [
-                'id' => $fieldName,
+                'id'      => $fieldName,
                 'content' => $name,
-                'sort' => $fieldName,
+                'sort'    => $fieldName,
                 'default' => true
             ];
         }
@@ -86,17 +77,26 @@ class BotUiList extends UiList
             $params['filter'] = $this->filter;
         }
         $result = $this->dataClass::getList($params);
-        $data = new \CAdminResult($result, $this->id);
+        $data   = new \CAdminResult($result, $this->id);
         while ($element = $data->NavNext(strPrefix: 'f_')) {
             $service = new Webhook($element['API_TOKEN'], $element['NAME']);
             if (!$element['WEBHOOK_CUSTOM_URL']) {
                 $element['WEBHOOK_CUSTOM_URL'] = $service->getWebhookUrl();
             }
-            $row =$this->uiList->AddRow($element['ID'], $element);
-            $row->AddViewField('NAME', print_url('https://t.me/'.$element['NAME'], '@'.$element['NAME']));
+            $row = $this->uiList->AddRow($element['ID'], $element);
+            $row->AddViewField('NAME', print_url('https://t.me/' . $element['NAME'], '@' . $element['NAME']));
             $row->AddActions([
                 $this->getDeleteAction($element['ID'])
             ]);
         }
+    }
+
+    protected function fillContextMenu(): void
+    {
+        $this->contextMenu[] = [
+            'TEXT' => Loc::getMessage('button_add'),
+            'LINK' => 'telegram_bot_edit.php?lang=' . LANGUAGE_ID,
+            'ICON' => 'btn_new'
+        ];
     }
 }
