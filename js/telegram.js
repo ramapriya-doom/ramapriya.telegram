@@ -1,13 +1,16 @@
 const Telegram = {
-    setWebhook: function (e) {
-        e.preventDefault();
+    deleteItem: function (tableName, itemId) {
 
-        BX.ajax.runAction('ramapriya:telegram.controller.Telegram.setWebhook', {})
+        BX.ajax.runAction('ramapriya:telegram.controller.GridAdminAction.deleteItem', {
+            data: {
+                tableName,
+                itemId
+            }
+        })
             .then(response => {
-                alert(response.data.message);
+                console.log(response);
             }, reject => {
-                let error = reject.errors[0];
-                alert(error.message);
+                console.log(reject);
             })
     }
 }
