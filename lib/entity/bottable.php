@@ -4,12 +4,15 @@ namespace Ramapriya\Telegram\Entity;
 
 use Bitrix\Main\ArgumentException;
 use Bitrix\Main\Localization\Loc;
+use Bitrix\Main\NotSupportedException;
 use Bitrix\Main\ORM\Data\DataManager;
+use Bitrix\Main\ORM\Data\DeleteResult;
 use Bitrix\Main\ORM\Entity;
 use Bitrix\Main\ORM\Fields;
 use Bitrix\Main\ORM\Query\Result;
 use Bitrix\Main\SystemException;
 use Ramapriya\Telegram\Service\Webhook;
+use Telegram\Bot\Api;
 
 Loc::loadMessages(__FILE__);
 
@@ -52,6 +55,11 @@ class BotTable
         return static::getList($params);
     }
 
+    public static function update($primary, array $data)
+    {
+        throw new NotSupportedException(Loc::getMessage('error_update_not_supports'));
+    }
+
     protected static function callOnAfterAddEvent($object, $fields, $id)
     {
         $service = new Webhook($fields['API_TOKEN'], $fields['NAME']);
@@ -65,9 +73,33 @@ class BotTable
         parent::callOnAfterAddEvent($object, $fields, $id);
     }
 
-    protected static function callOnBeforeUpdateEvent($object, $fields, $result)
+    /**
+     * Удаление вебхука перед удалением бота
+     * @param $object
+     * @param $entity
+     * @param $result
+     * @return void
+     * @throws \Telegram\Bot\Exceptions\TelegramSDKException
+     */
+    protected static function callOnBeforeDeleteEvent($object, $entity, $result)
     {
-        throw new \Exception(Loc::getMessage('error_update_not_supports'));
+        /**
+         * @var Bot $object
+         * @var Entity $entity
+         * @var DeleteResult $result
+         */
+        $object = self::getById($object->getId())->fetchObject();
+        dd($object);
+        $client = new Api($object->getApiToken());
+        $deleteWebhook = $client->deleteWebhook();
+
+        if ($deleteWebhook) {
+            $result->setData([
+                'webhook_deleted' => $deleteWebhook
+            ]);
+        }
+
+        parent::callOnBeforeDeleteEvent($object, $entity, $result);
     }
 
     /**
