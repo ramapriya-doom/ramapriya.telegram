@@ -5,7 +5,6 @@ namespace Ramapriya\Telegram\Facade\Admin;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\ORM\Data\DataManager;
 use Bitrix\Main\ORM\Entity;
-use Ramapriya\Telegram\Entity\EO_Bot_Entity;
 
 Loc::loadMessages(__FILE__);
 
@@ -13,7 +12,7 @@ abstract class UiList
 {
     protected \CAdminUiList $uiList;
     protected DataManager|string $dataClass;
-    protected EO_Bot_Entity|Entity $entity;
+    protected Entity $entity;
     protected array $filterFields = [];
     protected array $filter = [];
     protected array $contextMenu = [];
