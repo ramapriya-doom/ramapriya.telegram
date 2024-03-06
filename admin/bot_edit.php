@@ -61,7 +61,7 @@ $tabControl->Begin();
         <?php
         $tabControl->EndTab();
         $tabControl->Buttons([
-            'back_url' => '/bitrix/admin/telegram_bot_list.php?lang' . LANGUAGE_ID
+            'back_url' => '/bitrix/admin/telegram_bot_list.php?lang=' . LANGUAGE_ID
         ]);
         ?>
 
