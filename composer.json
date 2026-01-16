@@ -1,0 +1,10 @@
+{
+    "name": "ramapriya-doom/ramapriya.telegram",
+    "type": "bitrix-d7-module",
+    "authors": [
+        {
+            "name": "Roman Gonyukov",
+            "email": "roman@goniukov.ru"
+        }
+    ]
+}
